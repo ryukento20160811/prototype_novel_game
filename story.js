@@ -5,10 +5,10 @@
 // このファイルを編集してストーリーをカスタマイズ
 
 const CHARACTERS = {
-  player: { name: "あなた", color: "#a8d8ea" },
-  haruka: { name: "伊藤 遥", color: "#f9c9b6", role: "先輩（マーケティング部）" },
-  kenji: { name: "田中 賢二", color: "#b8d8b8", role: "同僚（営業部）" },
-  boss: { name: "部長", color: "#d4a5c9", role: "営業部長" },
+  player: { name: "ろいちむ", color: "#a8d8ea" },
+  ryu: { name: "真島　龍", color: "#f9c9b6", role: "同僚（ライバル）" },
+  ajikan: { name: "鯵缶", color: "#b8d8b8", role: "同僚" },
+  nanao: { name: "ななお", color: "#d4a5c9", role: "真島の友達" },
   narrator: { name: "", color: "#cccccc" },
 };
 
@@ -28,7 +28,7 @@ const SCENES = [
     id: "title",
     type: "title",
     title: "残業の夜に",
-    subtitle: "〜ある社会人の物語〜",
+    subtitle: "〜ある悲しき社会人の物語〜",
     bg: "office_night",
   },
   {
@@ -40,70 +40,72 @@ const SCENES = [
   {
     id: "s02",
     bg: "office_night",
-    char: "haruka",
+    char: "ajikan",
     expression: "😔",
-    text: "…また終電、逃しちゃいそうですね。",
+    text: "…私と遊んでくれないの？",
   },
   {
     id: "s03",
     bg: "office_night",
     char: "player",
-    text: "（先輩の伊藤さんだ。いつも遅くまで残っている）",
+    text: "（同僚のおっさんだ。何が言いたいのかよくわかんないんだよな）",
   },
   {
     id: "s04",
     bg: "office_night",
-    char: "haruka",
+    char: "ajikan",
     expression: "😅",
-    text: "あ、ごめんなさい。独り言でした。\n…あなたも残業ですか？",
+    text: "あ、ごめんなさい。独り言でした。\n…ろいろい今日も遊ぼう？？",
   },
   // ===== CHOICE 1 =====
   {
     id: "c01",
     type: "choice",
     bg: "office_night",
-    text: "伊藤先輩に何と答えますか？",
+    text: "おっさんに何と答えますか？",
     choices: [
-      { label: "「はい、企画書の締め切りが…」", next: "s05a" },
-      { label: "「少し手伝えることありますか？」", next: "s05b" },
+      { label: "「ぼく、明日早いんだよな…」", next: "s05a" },
+      { label: "「いいけど、何時から？」", next: "s05b" },
     ],
   },
   // === BRANCH A ===
   {
     id: "s05a",
     bg: "office_night",
-    char: "haruka",
+    char: "ajikan",
     expression: "🤔",
-    text: "企画書！私も今それで詰まってて…\nどんな内容ですか？",
+    text: "ろいろいのばか！…\nもう知らない！！！！！！",
   },
   {
     id: "s06a",
     bg: "office_night",
     char: "player",
-    text: "（新商品のプロモーション案。でも全然アイデアが浮かばない…）",
+    text: "（喜怒哀楽激しすぎ…）",
   },
   {
     id: "s07a",
     bg: "office_night",
-    char: "haruka",
+    char: "ajikan",
     expression: "😊",
-    text: "せっかくだから、少し一緒に考えましょうか。\n二人の方がきっとアイデア出やすいですよ。",
-    next: "s08",
+    text: "冗談だよ。\nしょうがないね。また明日あそぼ。",
+    // next: "s08",
+    next: "end_bad",
   },
   // === BRANCH B ===
   {
     id: "s05b",
     bg: "office_night",
-    char: "haruka",
+    char: "ajikan",
     expression: "😮",
-    text: "え、いいんですか？\n…実は企画書で行き詰まってて。",
+    text: "じゃあ２１時？",
   },
   {
     id: "s06b",
     bg: "office_night",
     char: "player",
-    text: "（ちょうど自分も同じ案件を抱えていた。もしかしたら相乗効果があるかも）",
-    next: "s08",
+    text: "（眠いんだよな。ぼく）",
+    // next: "s08",
+    next: "end_good",
   },
   // ===== MERGE =====
   {
@@ -115,7 +117,7 @@ const SCENES = [
   {
     id: "s09",
     bg: "cafe",
-    char: "haruka",
+    char: "ajikan",
     expression: "✨",
     text: "仕事って、一人でやろうとするから辛くなるんですよね。\nあなたと話して、なんか気が楽になりました。",
   },
@@ -128,7 +130,7 @@ const SCENES = [
   {
     id: "s11",
     bg: "rooftop",
-    char: "kenji",
+    char: "majima",
     expression: "😏",
     text: "昨日、伊藤先輩と深夜まで残ってたって？\nなんか良い雰囲気じゃないですか。",
   },
@@ -153,7 +155,7 @@ const SCENES = [
   {
     id: "s13a",
     bg: "rooftop",
-    char: "kenji",
+    char: "majima",
     expression: "😄",
     text: "そっか〜。でも伊藤先輩、\n昨日から何か楽しそうなんだよな。",
     next: "s14",
@@ -162,7 +164,7 @@ const SCENES = [
   {
     id: "s13b",
     bg: "rooftop",
-    char: "kenji",
+    char: "majima",
     expression: "🤝",
     text: "正直に言う！ちゃんと向き合った方がいい。\n仕事も恋愛も、逃げてたら何も変わらないって。",
     next: "s14",
@@ -176,7 +178,7 @@ const SCENES = [
   {
     id: "s15",
     bg: "meeting_room",
-    char: "haruka",
+    char: "ajikan",
     expression: "😤",
     text: "部長が急に方針変更って言い出して…！\n明日の朝イチまでに修正案が必要なんです。",
   },
@@ -195,7 +197,7 @@ const SCENES = [
   {
     id: "s18",
     bg: "office_night",
-    char: "haruka",
+    char: "ajikan",
     expression: "😌",
     text: "…ありがとうございます。\nあなたがいなかったら、本当に詰んでました。",
   },
@@ -218,34 +220,34 @@ const SCENES = [
   },
   // ===== ENDINGS =====
   {
-    id: "end_a",
+    id: "end_good",
     bg: "office_night",
-    char: "haruka",
+    char: "ajikan",
     expression: "😊",
-    text: "…はい、ぜひ。\nあなたと仕事すると、なぜか自信が持てるんです。",
+    text: "…今日は寝かせないぞ♡",
   },
   {
-    id: "end_a2",
+    id: "end_good2",
     type: "ending",
     bg: "office_night",
     title: "ENDING A",
-    subtitle: "「仕事仲間」",
-    description: "二人は最高の仕事仲間になった。\nその先にあるものは、まだ誰にも分からない。",
+    subtitle: "「ともだち？」",
+    description: "二人は最高のともだち？になった。\n果たして何時に寝れるだろうか、まだ誰にも分からない。",
   },
   {
-    id: "end_b",
+    id: "end_bad",
     bg: "office_night",
-    char: "haruka",
+    char: "ajikan",
     expression: "😳",
-    text: "お礼…？\n…い、いいですよ別に。\n…でも、嬉しいです。",
+    text: "ﾁﾗｯ|•ω•｡)",
   },
   {
-    id: "end_b2",
+    id: "end_bad",
     type: "ending",
     bg: "office_night",
     title: "ENDING B",
-    subtitle: "「残業の後で」",
-    description: "週末のカフェで、二人は仕事の話より\nずっと大切なことを話した。",
+    subtitle: "「また明日」",
+    description: "本当の闘いはこれからだ。",
   },
 ];
 
