@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d0d1a">
+<title>残業の夜に</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ==============================
+   VARIABLES & RESET
+============================== */
+:root {
+  --bg-primary: #0d0d1a;
+  --surface: rgba(10, 10, 25, 0.85);
+  --surface-light: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.1);
+  --text: #e8e4da;
+  --text-muted: rgba(232,228,218,0.55);
+  --accent: #c9a96e;
+  --accent-glow: rgba(201,169,110,0.25);
+  --choice-bg: rgba(15,15,35,0.9);
+  --choice-hover: rgba(201,169,110,0.12);
+  --radius: 12px;
+  --phone-w: 390px;
+  --phone-h: 844px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: #05050f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ==============================
+   PHONE SHELL
+============================== */
+#app {
+  width: min(var(--phone-w), 100vw);
+  height: min(var(--phone-h), 100vh);
+  position: relative;
+  overflow: hidden;
+  border-radius: clamp(0px, 2vw, 40px);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08),
+              0 40px 80px rgba(0,0,0,0.8),
+              0 0 120px rgba(201,169,110,0.05);
+}
+
+/* ==============================
+   BACKGROUND
+============================== */
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  transition: background 1.2s ease;
+  z-index: 0;
+}
+
+.bg-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(201,169,110,0.15);
+  animation: float linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(-20px) scale(1); opacity: 0; }
+}
+
+/* City lights effect */
+.city-lights {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 8px,
+    rgba(201,169,110,0.04) 8px,
+    rgba(201,169,110,0.04) 10px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ==============================
+   TITLE SCREEN
+============================== */
+.title-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 40px;
+  text-align: center;
+}
+
+.title-deco {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+  margin: 0 auto 24px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scaleY(0.8); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+.title-main {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.8rem, 8vw, 2.6rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.15em;
+  line-height: 1.3;
+  text-shadow: 0 0 40px var(--accent-glow);
+  animation: fadeIn 1.5s ease both;
+}
+
+.title-sub {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  margin-top: 12px;
+  animation: fadeIn 1.5s 0.3s ease both;
+}
+
+.title-divider {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent), transparent);
+  margin: 32px auto;
+  animation: fadeIn 1.5s 0.6s ease both;
+}
+
+.btn-start {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid rgba(201,169,110,0.4);
+  padding: 14px 40px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: fadeIn 1.5s 0.9s ease both, breathe 3s 2s ease-in-out infinite;
+}
+
+.btn-start:hover, .btn-start:active {
+  background: var(--accent-glow);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 10px var(--accent-glow); }
+  50% { box-shadow: 0 0 25px rgba(201,169,110,0.4); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==============================
+   GAME SCREEN
+============================== */
+.game-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+/* Character expression area */
+.char-area {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.char-expression {
+  font-size: clamp(4rem, 15vw, 7rem);
+  filter: drop-shadow(0 0 20px rgba(201,169,110,0.3));
+  animation: charAppear 0.4s ease both;
+  user-select: none;
+}
+
+@keyframes charAppear {
+  from { opacity: 0; transform: translateY(20px) scale(0.8); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Dialog box */
+.dialog-area {
+  position: relative;
+  padding: 0 16px 24px;
+  z-index: 20;
+}
+
+.dialog-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dialog-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.char-name-bar {
+  padding: 10px 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.char-name-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.char-name {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.dialog-text {
+  padding: 10px 18px 16px;
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+  font-weight: 400;
+  line-height: 1.9;
+  color: var(--text);
+  min-height: 80px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.next-indicator {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 16px 10px;
+  animation: bounce 1.2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(4px); opacity: 1; }
+}
+
+.next-arrow {
+  width: 20px;
+  height: 20px;
+  border-right: 1.5px solid var(--accent);
+  border-bottom: 1.5px solid var(--accent);
+  transform: rotate(45deg) translateY(-4px);
+  border-radius: 2px;
+}
+
+/* Progress bar */
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 0 0 var(--radius) var(--radius);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--accent), rgba(201,169,110,0.5));
+  transition: width 0.4s ease;
+}
+
+/* ==============================
+   CHOICE SCREEN
+============================== */
+.choice-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 24px 20px 48px;
+  z-index: 30;
+  background: linear-gradient(to top, rgba(5,5,15,0.9) 0%, transparent 60%);
+}
+
+.choice-question {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.choice-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice-btn {
+  width: 100%;
+  background: var(--choice-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(0.8rem, 3.2vw, 0.9rem);
+  font-weight: 400;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.5;
+}
+
+.choice-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform 0.25s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+.choice-btn:hover::before,
+.choice-btn:active::before {
+  transform: scaleY(1);
+}
+
+.choice-btn:hover,
+.choice-btn:active {
+  background: var(--choice-hover);
+  border-color: rgba(201,169,110,0.3);
+  transform: translateX(4px);
+}
+
+/* ==============================
+   ENDING SCREEN
+============================== */
+.ending-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  padding: 48px 32px;
+  text-align: center;
+  background: rgba(5,5,15,0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadeIn 1.2s ease both;
+}
+
+.ending-tag {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.ending-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.6rem, 7vw, 2.2rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.ending-subtitle {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 0.9rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  margin-bottom: 32px;
+}
+
+.ending-desc {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  line-height: 2;
+  margin-bottom: 48px;
+}
+
+.btn-restart {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 12px 32px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-restart:hover, .btn-restart:active {
+  border-color: rgba(201,169,110,0.4);
+  color: var(--accent);
+}
+
+/* ==============================
+   TEXT ANIMATION
+============================== */
+.typewriter-char {
+  display: inline;
+  animation: charReveal 0.02s ease both;
+}
+
+@keyframes charReveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==============================
+   TOP STATUS BAR
+============================== */
+.status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.status-title {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+}
+
+.status-scene {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 300;
+  color: var(--text-muted);
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<!-- Story data -->
+<script src="story.js"></script>
+
+<!-- Preact + Hooks -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.19.3/preact.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.19.3/hooks.umd.js"></script>
+
+<script>
+const { h, render, Fragment } = preact;
+const { useState, useEffect, useRef, useCallback, useMemo } = preactHooks;
+
+// ==============================
+// PARTICLES
+// ==============================
+function Particles() {
+  const particles = useMemo(() => Array.from({ length: 8 }, (_, i) => ({
+    id: i,
+    size: Math.random() * 3 + 1,
+    left: Math.random() * 100,
+    delay: Math.random() * 8,
+    duration: Math.random() * 10 + 8,
+  })), []);
+
+  return h('div', { className: 'bg-particles' },
+    particles.map(p => h('div', {
+      key: p.id,
+      className: 'particle',
+      style: {
+        width: p.size + 'px',
+        height: p.size + 'px',
+        left: p.left + '%',
+        animationDelay: p.delay + 's',
+        animationDuration: p.duration + 's',
+      }
+    }))
+  );
+}
+
+// ==============================
+// TYPEWRITER TEXT
+// ==============================
+function TypewriterText({ text, speed = 35, onDone }) {
+  const [displayed, setDisplayed] = useState('');
+  const [done, setDone] = useState(false);
+  const ref = useRef(0);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    ref.current = 0;
+    setDisplayed('');
+    setDone(false);
+
+    function tick() {
+      ref.current++;
+      setDisplayed(text.slice(0, ref.current));
+      if (ref.current >= text.length) {
+        setDone(true);
+        if (onDone) onDone();
+      } else {
+        const delay = text[ref.current] === '\n' ? speed * 4 : 
+                      '。！？…'.includes(text[ref.current]) ? speed * 3 : speed;
+        timerRef.current = setTimeout(tick, delay);
+      }
+    }
+    timerRef.current = setTimeout(tick, speed);
+    return () => clearTimeout(timerRef.current);
+  }, [text]);
+
+  return h(Fragment, null,
+    h('span', null, displayed),
+    !done && h('span', { style: { opacity: 0.5, animation: 'none' } }, '▋')
+  );
+}
+
+// ==============================
+// TITLE SCREEN
+// ==============================
+function TitleScreen({ scene, onStart }) {
+  const bg = BACKGROUNDS[scene.bg] || BACKGROUNDS.office_night;
+  return h('div', { className: 'title-screen' },
+    h('div', { className: 'bg-layer', style: { background: bg.gradient } }),
+    h(Particles, null),
+    h('div', { className: 'city-lights' }),
+    h('div', { style: { position: 'relative', zIndex: 10 } },
+      h('div', { className: 'title-deco' }),
+      h('h1', { className: 'title-main' }, scene.title),
+      h('p', { className: 'title-sub' }, scene.subtitle),
+      h('div', { className: 'title-divider' }),
+      h('button', { className: 'btn-start', onClick: onStart }, 'タップして始める'),
+    )
+  );
+}
+
+// ==============================
+// GAME SCREEN
+// ==============================
+function GameScreen({ scene, sceneIndex, totalScenes, onNext }) {
+  const [textDone, setTextDone] = useState(false);
+  const bg = BACKGROUNDS[scene.bg] || BACKGROUNDS.office_night;
+  const char = scene.char ? CHARACTERS[scene.char] : null;
+  const progress = (sceneIndex / (totalScenes - 1)) * 100;
+
+  useEffect(() => setTextDone(false), [scene.id]);
+
+  return h('div', { className: 'game-screen', onClick: onNext },
+    h('div', { className: 'bg-layer', style: { background: bg.gradient } }),
+    h(Particles, null),
+    h('div', { className: 'city-lights' }),
+
+    // Status bar
+    h('div', { className: 'status-bar' },
+      h('span', { className: 'status-title' }, '残業の夜に'),
+      h('span', { className: 'status-scene' }, `${sceneIndex}`)
+    ),
+
+    // Character
+    h('div', { className: 'char-area' },
+      scene.expression && h('div', { className: 'char-expression', key: scene.id }, scene.expression)
+    ),
+
+    // Dialog
+    h('div', { className: 'dialog-area' },
+      h('div', { className: 'dialog-box', style: { position: 'relative' } },
+        char && char.name && h('div', { className: 'char-name-bar' },
+          h('div', { className: 'char-name-dot', style: { background: char.color } }),
+          h('span', { className: 'char-name', style: { color: char.color } }, char.name)
+        ),
+        h('div', { className: 'dialog-text' },
+          h(TypewriterText, { key: scene.id, text: scene.text || '', speed: 30, onDone: () => setTextDone(true) })
+        ),
+        textDone && h('div', { className: 'next-indicator' },
+          h('div', { className: 'next-arrow' })
+        ),
+        h('div', { className: 'progress-bar' },
+          h('div', { className: 'progress-fill', style: { width: `${progress}%` } })
+        )
+      )
+    )
+  );
+}
+
+// ==============================
+// CHOICE SCREEN
+// ==============================
+function ChoiceScreen({ scene, onChoose }) {
+  const bg = BACKGROUNDS[scene.bg] || BACKGROUNDS.office_night;
+  return h('div', { style: { position: 'absolute', inset: 0 } },
+    h('div', { className: 'bg-layer', style: { background: bg.gradient } }),
+    h(Particles, null),
+    h('div', { className: 'city-lights' }),
+    h('div', { className: 'choice-screen' },
+      h('p', { className: 'choice-question' }, scene.text),
+      h('div', { className: 'choice-list' },
+        scene.choices.map((c, i) =>
+          h('button', {
+            key: i,
+            className: 'choice-btn',
+            onClick: () => onChoose(c.next),
+          }, c.label)
+        )
+      )
+    )
+  );
+}
+
+// ==============================
+// ENDING SCREEN
+// ==============================
+function EndingScreen({ scene, onRestart }) {
+  const bg = BACKGROUNDS[scene.bg] || BACKGROUNDS.office_night;
+  return h('div', { style: { position: 'absolute', inset: 0 } },
+    h('div', { className: 'bg-layer', style: { background: bg.gradient } }),
+    h(Particles, null),
+    h('div', { className: 'ending-screen' },
+      h('div', { className: 'ending-tag' }, '── END ──'),
+      h('h2', { className: 'ending-title' }, scene.title),
+      h('p', { className: 'ending-subtitle' }, scene.subtitle),
+      h('div', { style: { width: '60px', height: '1px', background: 'rgba(201,169,110,0.4)', margin: '0 auto 24px' } }),
+      h('p', { className: 'ending-desc' }, scene.description),
+      h('button', { className: 'btn-restart', onClick: onRestart }, '最初からプレイ')
+    )
+  );
+}
+
+// ==============================
+// MAIN APP
+// ==============================
+function App() {
+  const [sceneIndex, setSceneIndex] = useState(0);
+  const scene = SCENES[sceneIndex];
+
+  // Navigate to scene by ID
+  const goToId = useCallback((id) => {
+    const idx = SCENE_MAP[id];
+    if (idx !== undefined) setSceneIndex(idx);
+  }, []);
+
+  // Next scene
+  const next = useCallback(() => {
+    const current = SCENES[sceneIndex];
+    if (current.next) {
+      goToId(current.next);
+    } else if (sceneIndex + 1 < SCENES.length) {
+      setSceneIndex(i => i + 1);
+    }
+  }, [sceneIndex, goToId]);
+
+  const restart = useCallback(() => setSceneIndex(0), []);
+
+  if (!scene) return null;
+
+  if (scene.type === 'title') {
+    return h(TitleScreen, { scene, onStart: next });
+  }
+  if (scene.type === 'choice') {
+    return h(ChoiceScreen, { scene, onChoose: goToId });
+  }
+  if (scene.type === 'ending') {
+    return h(EndingScreen, { scene, onRestart: restart });
+  }
+  return h(GameScreen, {
+    scene,
+    sceneIndex,
+    totalScenes: SCENES.length,
+    onNext: next,
+  });
+}
+
+render(h(App, null), document.getElementById('app'));
+</script>
+</body>
+</html>
